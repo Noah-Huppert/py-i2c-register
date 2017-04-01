@@ -95,6 +95,14 @@ velocity = controls.to_twos_comp_int("VELOCITY", "VELOCITY", read_first=True)
 ```
 This would read the `NETWORK_FLAG` segment of the `HEALTH` register and the `VELOCITY` segment of the `VELOCITY` register. 
 
+Ontop of using `RegisterList`s helper methods one can access raw `RegisterSegment` values via the `RegisterSegment.bits` 
+array. This array contains the raw `0` or `1` values of the register. Just be sure to call `Register.read` before accessing 
+the `RegisterSegment.bits` array:
+```python
+controls.get("VELOCITY").read()
+velocity_bits = controls.get("VELOCITY").get("VELOCITY").bits
+```
+
 ## Writing to RegisterSegments
 The `RegisterList` class provides the `set_bits` and `set_bits_from_int` helper methods. Similar to the reading helper 
 methods mentioned above `set_bits` and `set_bits_from_int` both also take a `Register` and `RegisterSegment` name as 
@@ -111,7 +119,7 @@ This would set the `ACQ_COMMAND` segment of the `ACQ_COMMAND` register to the va
 
 # Writing Wrapper Classes
 I2C Register's simple architecture lends itself well to being used in hardware wrapper classes. All one must do is 
-create a class with its own `RegisterList` instance and then add `Register` and `RegisterSegment` definitions in the `__init__()` 
+create a class with its own `RegisterList` instance. Then add `Register` and `RegisterSegment` definitions in the `__init__()` 
 method:
 ```python
 from py_i2c_register.register_list import RegisterList
@@ -135,7 +143,7 @@ class LidarLiteV3():
     SEG_VELOCITY= REG_VELOCITY
     
     REG_DISTANCE = "DISTANCE"
-    SEG_DISTANCE = "DISTANCE"
+    SEG_DISTANCE = REG_DISTANCE
     
     def __init__(self):
         # Create some device specific I2C Object
@@ -162,6 +170,9 @@ class LidarLiteV3():
             .add(LightLiteV3.SEG_DISTANCE, 0, 15, [0] * 16)
             
     # Provide useful helper methods
+    def measure(self):
+        self.controls.set_bits_from_int(LidarLiteV3.REG_ACQ_COMMAND, LidarLiteV3.SEG_ACQ_COMMAND, 0x04, write_after=True)
+         
     def distance(self):
         return self.controls.to_int(LidarLiteV3.REG_DISTANCE, LidarLiteV3.SEG_DISTANCE, read_first=True)
     
@@ -172,6 +183,7 @@ class LidarLiteV3():
 lidar = LidarLiteV3()
 
 while True:
+    lidar.measure()
     print("Car is going {} m/s when it was {} m away".format(lidar.velocity(), lidar.distance()))
 ```     
 
