@@ -2,10 +2,14 @@
 Python wrapper library around the common I2C controller register pattern. 
 
 I2C Register is a python library which aims to make communicating with registers on I2C devices dead simple. It is meant 
-to directly transfer the Register Definitions pages of a data sheet into your program:
+to directly transfer the Register Definitions pages of a data sheet into your program. 
+
+# Quick Example
+Take these control register definitions from a data sheet:
 ![Example Hardware Data Sheet Register Definitions page 1](/docs/img/example-register-defs-p1.png)
 ![Example Hardware Data Sheet Register Definitions page 2](/docs/img/example-register-defs-p2.png)
 
+With the help of the I2C Register library they can easily be represented and manipulated.
 ```python
 # Create RegisterList instance to hold registers, device's i2c address is 0x62
 controls = RegisterList(0x62, i2c, {})
