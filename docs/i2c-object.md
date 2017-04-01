@@ -1,3 +1,10 @@
+# Table Of Contents
+- [I2C Object](#i2c-object)
+    - [readBytes()](#readbytesdevice_addr-reg_addr-num_bytes)
+    - [writeBytes()](#writebytesdevice_addr-reg_addr-bytes_arr)
+- [I2C Object Uses](#i2c-object-uses)
+- [Existing I2C Object Implementations](#existing-i2c-object-implementations)
+
 # I2C Object
 The I2C Register library assumes a theoretical "I2C Object" is passed to any read or write related functions. This 
 allows the library to stay platform agnostic with minimal effort. 
@@ -31,7 +38,7 @@ The integer `1` if the write fails, any other return value is treated as a succe
 ### Raises
 Nothing
 
-# I2C Object uses
+# I2C Object Uses
 The I2C Object is used in 3 places in the I2C Register library. 
 
 The `Register.read` and `Register.write` methods take an I2C Object as their only argument. They use it to communicate 
@@ -39,7 +46,7 @@ with registers over I2C. The `RegisterList` constructor also takes an I2C Object
 this I2C Object to call `Register.read` and `Register.write` in some helper methods of its own. 
 
 
-# Existing I2C Object implementations
+# Existing I2C Object Implementations
 This library was originally written to run on an [Omega 2](https://www.indiegogo.com/projects/omega2-5-linux-computer-with-wi-fi-made-for-iot#/). 
 Thus the I2C Object signature was based off of the [Omega 2's I2C library](https://docs.onion.io/omega2-docs/i2c-python-module.html). 
 
