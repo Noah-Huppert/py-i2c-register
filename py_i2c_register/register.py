@@ -164,6 +164,10 @@ class Register():
         else:
             raise AttributeError("Register {} is not set up to allow write operations, op_mode: \"{}\"".format(self.name, self.op_mode))
 
+    """String representation of Register
+    Returns:
+        - str: String representation of Register
+    """
     def __str__(self):
         out = "Register<name={}, address={}, op_mode={}, segments={{\n".format(self.name, self.reg_addr, self.op_mode)
 
