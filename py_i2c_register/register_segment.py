@@ -101,23 +101,25 @@ class RegisterSegment():
         # Each loop "synthesizes" a new byte from the bits array
         for byte_i in range(RegisterSegment.num_bytes_for_bits(len(bits))):
             # Check that upper limit isn't too big
-            byte_slice_upper = byte_i * 8  # The index we *want* to slice to
+            byte_slice_upper = ((byte_i + 1) * 8) - 1  # The index we *want* to slice to
             to_pad = 0  # Used to keep track of how many 0s we need to pad the end of this byte
             if byte_slice_upper > len(bits) - 1:
+                # Keep track of the fact that we need to pad the end of this byte with some 0s
+                to_pad = byte_slice_upper - (len(bits) - 1)
+
                 # Resize if index we wanted to slice to is too big
                 byte_slice_upper = len(bits) - 1
 
-                # Also keep track of the fact that we need to pad the end of this byte with some 0s
-                to_pad = byte_slice_upper - len(bits)
 
             # Convert
-            byte_slice = bits[byte_slice_lower:byte_slice_upper]
-            byte = RegisterSegment.to_int(byte_slice)
-            bytes.append(byte)
+            byte_slice = bits[byte_slice_lower:byte_slice_upper + 1]
 
             # Append padding
             if to_pad > 0:
-                bytes.append([0] * to_pad)
+                byte_slice.extend([0] * to_pad)
+
+            byte = RegisterSegment.to_int(byte_slice)
+            bytes.append(byte)
 
             # Add 8 to lower slice bound for next byte
             byte_slice_lower += 8
