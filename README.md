@@ -191,3 +191,21 @@ while True:
     print("Car is going {} m/s when it was {} m away".format(lidar.velocity(), lidar.distance()))
 ```     
 
+# Development
+The code for I2C Register is located in the `py_i2c_register` directory. Feel free to contribute by opening a pull 
+request. I try to test and document as much as I can.
+
+Supported Python Versions: 2.7, 3.6
+
+## Running tests
+To run tests the `coverage` python module must be installed. This can be installed by typing:
+```bash
+pip install --user coverage
+```
+
+You can then run test by executing the `test` Make target:
+```bash
+make test
+```
+
+To see a more detailed HTML report you can run the `test-html` Make target. The results will then be saved to `htmlcov/index.html`.

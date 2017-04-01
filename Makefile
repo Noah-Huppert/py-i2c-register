@@ -1,2 +1,8 @@
+.PHONY: test test-html
 test:
-	python -m unittest discover
+	coverage run --branch -m unittest discover
+	coverage report -m
+
+test-html: test
+	coverage html
+
