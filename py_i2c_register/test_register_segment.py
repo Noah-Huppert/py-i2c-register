@@ -50,3 +50,18 @@ class TestRegisterSegmentToPaddedByteArr(unittest.TestCase):
     def test_two_bytes_perfect_fit(self):
         self.assertEqual(RegisterSegment.to_padded_byte_arr([0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0]), [85, 170])
 
+class TestRegisterSegmentInit(unittest.TestCase):
+    def test_perfect(self):
+        seg = RegisterSegment("NAME", 0, 7, [0] * 8)
+        self.assertEqual(seg.name, "NAME")
+        self.assertEqual(seg.lsb_i, 0)
+        self.assertEqual(seg.msb_i, 7)
+        self.assertEqual(seg.bits, [0] * 8)
+
+    def test_lsb_higher_than_msb(self):
+        with self.assertRaises(ValueError):
+            seg = RegisterSegment("NAME", 7, 0, [0] * 8)
+
+    def test_provided_bits_too_small(self):
+        with self.assertRaises(IndexError):
+            seg = RegisterSegment("NAME", 0, 7, [0])

@@ -139,9 +139,6 @@ class RegisterSegment():
         if lsb_i > msb_i:
             raise ValueError("LSB index can not be greater than MSB index, lsb_i: {}, msb_i: {}".format(lsb_i, msb_i))
 
-        if msb_i < lsb_i:
-            raise ValueError("MSB index can not be less thans LSB index, lsb_i: {}, msb_i: {}".format(lsb_i, msb_i))
-
         self.lsb_i = lsb_i
         self.msb_i = msb_i
 
