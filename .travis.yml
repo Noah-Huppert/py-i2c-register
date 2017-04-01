@@ -2,5 +2,8 @@ language: python
 python:
     - "2.7"
     - "3.6"
-install: "pip install coverage"
+install: "pip install -r requirements.txt"
 script: "make test"
+after_success: "CODECLIMATE_REPO_TOKEN=$CODE_CLIMATE_TOKEN codeclimate-test-reporter"
+env:
+  secure: "AoQDQX5B//UP3TU1d0S//ttZNILIK/ZZqjjNi/bzNCe1yGxTj/jvfpLnOBtSgXLoQ6t5E1qVhyqnSvWoq0lrA9rrmJJRRStmxkJc6CbZVJvyIIqLFiRDpcqM9DYVprxn61LzAl/S8X81hxPv4oKnuAYTRUsTXY2hrqoOi3sQMPMDs/e0QgJu98hFtv/m2DsDdG9uRDM1B+5Lc63ENQJqaH9fYG0jhoxgCsjyKMcVqeF+2BU/Bv1wtBpvBdGKat4lHiCeXAu9j5EaludrP1rWO4EY4xRyLVokWxiK7EFZoyva6fE9Sc5pirMxF8D08unAKgKYvcRbM+jUA4TTmTa0c8VwzspsW8Ee76/8dHjJfHP+4uOjnbZfIY/aHhHuaEWKyWptIrs71IrM/bnkEN7r0BfEaKiv/khxbRnB769K31MuQrKjSwoAhnlE7vAaadq0K35WM40J05UIjuDak+dR8n4GeDr6JH2FqyK7E+ziPqz/XGUkTHllQLie79EzheRNRCt4vRSWTL7CWqxou7YwbS4OQCujkxZj0WacL7ybLQtzaBG4fTG7hGWWvfdygDEtQUJdy4Ap/7EQfbej4yWN+GO5bSHNWEcSq0gOTEMsCF2Fg3Qz2ln2I3N3DQGdf/+978nKzRluny56g5BGlSI01gx16dj4NFnYJCH6FgF8f4I="
