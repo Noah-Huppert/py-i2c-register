@@ -35,7 +35,7 @@ controls.add("VELOCITY", 0x09, Register.READ, {})\
 
     
 # Super simple to read and write values
-# Set ACQ_COMMAND Register bits to value of 0xff, then write to register
+# Set ACQ_COMMAND Register bits to value of 0x04, then write to register
 controls.set_bits_from_int("ACQ_COMMAND", "ACQ_COMMAND", 0x04, write_after=True)  
 
 # Read STATUS register for BUSY_FLAG value and convert to an integer
