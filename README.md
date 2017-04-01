@@ -4,6 +4,18 @@ Python wrapper library around the common I2C controller register pattern.
 I2C Register is a python library which aims to make communicating with registers on I2C devices dead simple. It is meant 
 to directly transfer the Register Definitions pages of a data sheet into your program. 
 
+# Table Of Contents
+- [Quick Example](#quick-example)
+- [Systems Overview](#systems-overview)
+    - [Creating a RegisterList](#creating-a-registerlist)
+    - [Defining Registers](#defining-registers)
+    - [Adding RegisterSegments](#adding-registersegments)
+    - [Reading from RegisterSegments](#reading-from-registersegments)
+    - [Writing to RegisterSegments](#writing-to-registersegments)
+- [Writting Wrapper Classes](#writing-wrapper-classes)
+- [Development](#development)
+    - [Running Tests](#running-tests)
+
 # Quick Example
 Take these control register definitions from a data sheet:
 ![Example Hardware Data Sheet Register Definitions page 1](/docs/img/example-register-defs-p1.png)
@@ -45,7 +57,7 @@ busy = controls.to_int("STATUS", "BUSY_FLAG", read_first=True)
 velocity = controls.to_twos_comp_int("VELOCITY", "VELOCITY", read_first=True)
 ```
 
-# Systems overview
+# Systems Overview
 The main class this library provides is the `RegisterList` class. This class manages a list of 
 `Register` definitions. It also provides some useful helper methods to make performing certain common actions quick and 
 easy.
@@ -197,7 +209,7 @@ request. I try to test and document as much as I can.
 
 Supported Python Versions: 2.7, 3.6
 
-## Running tests
+## Running Tests
 To run tests the `coverage` python module must be installed. This can be installed by typing:
 ```bash
 pip install --user coverage
