@@ -1,7 +1,7 @@
 # Table Of Contents
 - [I2C Object](#i2c-object)
-    - [readBytes()](#readbytesdevice_addr-reg_addr-num_bytes)
-    - [writeBytes()](#writebytesdevice_addr-reg_addr-bytes_arr)
+    - [readBytes(...)](#readbytesdevice_addr-reg_addr-num_bytes)
+    - [writeBytes(...)](#writebytesdevice_addr-reg_addr-bytes_arr)
 - [I2C Object Uses](#i2c-object-uses)
 - [Existing I2C Object Implementations](#existing-i2c-object-implementations)
 
