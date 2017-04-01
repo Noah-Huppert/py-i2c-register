@@ -37,3 +37,11 @@ The I2C Object is used in 3 places in the I2C Register library.
 The `Register.read` and `Register.write` methods take an I2C Object as their only argument. They use it to communicate 
 with registers over I2C. The `RegisterList` constructor also takes an I2C Object as an parameter. The `RegisterList` uses 
 this I2C Object to call `Register.read` and `Register.write` in some helper methods of its own. 
+
+
+# Existing I2C Object implementations
+This library was originally written to run on an [Omega 2](https://www.indiegogo.com/projects/omega2-5-linux-computer-with-wi-fi-made-for-iot#/). 
+Thus the I2C Object signature was based of of the [Omega 2's I2C library](https://docs.onion.io/omega2-docs/i2c-python-module.html). 
+
+I am also currently writing tests for this package and plan to create a mock I2C Object for testing purposes. Once that 
+is complete I will include it here as an example.
