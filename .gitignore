@@ -5,3 +5,7 @@
 # Coverage
 htmlcov
 .coverage
+
+# Python
+__pycache__/
+*.py[cod]
