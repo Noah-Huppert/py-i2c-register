@@ -55,7 +55,7 @@ class RegisterSegment():
         - int: Bits in integer form
     """
     @staticmethod
-    def to_two_comp_int(bits):
+    def to_twos_comp_int(bits):
         bits_str = ""
 
         for b in bits:
@@ -157,7 +157,7 @@ class RegisterSegment():
         - int: Bits converted to integer form by reversing two's compliment
     """
     def bytes_to_twos_comp_int(self):
-        return RegisterSegment.to_two_comp_int(self.bits)
+        return RegisterSegment.to_twos_comp_int(self.bits)
 
     """Update RegisterSegment bits from given bytes array
     The bytes array is assumed to be the complete data read off of a register. Thus the first byte's LSB will be 
@@ -204,7 +204,9 @@ class RegisterSegment():
             in_byte_i = int(math.floor(float(bit_i) / 8.0))
             bit_offset = (in_byte_i * 8)  # Used to figure out which bit in the byte we are in
 
-            self.bits[bit_i - self.lsb_i] = needed_bytes_as_bits[in_byte_i - start_byte][bit_i - bit_offset]
+            // TODO: Figure out index mapping b/c binary counts from right to left and array indexes count from left to right
+            // This could effect more than just this issue, look at failing tests
+            self.bits[bit_i - self.lsb_i] = needed_bytes_as_bits[in_byte_i - start_byte][bit_i - bit_offset - 1]
 
     """Set Segment bits
     Runs some sanity checks on the new bits before setting them.

@@ -210,9 +210,9 @@ request. I try to test and document as much as I can.
 Supported Python Versions: 2.7, 3.6
 
 ## Running Tests
-To run tests the `coverage` python module must be installed. This can be installed by typing:
+To run tests a couple python packages are required. To install them you can run the `test-install` Make target:
 ```bash
-pip install --user coverage
+make test-install
 ```
 
 You can then run test by executing the `test` Make target:

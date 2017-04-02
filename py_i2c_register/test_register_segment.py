@@ -1,4 +1,6 @@
 import unittest
+from unittest.mock import MagicMock
+from unittest.mock import patch
 from py_i2c_register.register_segment import RegisterSegment
 
 class TestRegisterSegmentToBits(unittest.TestCase):
@@ -19,7 +21,7 @@ class TestRegisterSegmentToInt(unittest.TestCase):
 
 class TestRegisterSegmentToTwosCompInt(unittest.TestCase):
     def test_number(self):
-        self.assertEqual(RegisterSegment.to_two_comp_int([1, 1, 1, 1, 1, 0, 1, 0]), -6)
+        self.assertEqual(RegisterSegment.to_twos_comp_int([1, 1, 1, 1, 1, 0, 1, 0]), -6)
 
 class TestRegisterSegmentNumBytesForBits(unittest.TestCase):
     def test_lower_range(self):
@@ -65,3 +67,27 @@ class TestRegisterSegmentInit(unittest.TestCase):
     def test_provided_bits_too_small(self):
         with self.assertRaises(IndexError):
             seg = RegisterSegment("NAME", 0, 7, [0])
+
+class TestRegisterSegmentProxyMethods(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.bits = [1, 0, 1, 0, 1, 0, 1, 0]
+
+    def setUp(self):
+        self.seg = RegisterSegment("NAME", 0, 7, self.bits)
+
+    @patch("py_i2c_register.register_segment.RegisterSegment")
+    def test_bytes_to_int(self, RS):
+        self.seg.bytes_to_int()
+        RS.to_int.assert_called_once_with(self.bits)
+
+    @patch("py_i2c_register.register_segment.RegisterSegment")
+    def test_bytes_to_twos_comp_int(self, RS):
+        self.seg.bytes_to_twos_comp_int()
+        RS.to_twos_comp_int.assert_called_once_with(self.bits)
+
+class TestRegisterSegmentUpdateBits(unittest.TestCase):
+    def test_perfect(self):
+        seg = RegisterSegment("NAME", 0, 2, [0] * 3)
+        seg.update_bits([80, 170])
+        self.assertEqual(seg.bits, [0, 1, 0])

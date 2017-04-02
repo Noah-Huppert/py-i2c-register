@@ -1,2 +1,3 @@
 coverage
 codeclimate-test-reporter
+mock
