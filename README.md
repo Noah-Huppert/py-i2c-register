@@ -5,6 +5,7 @@ I2C Register is a python library which aims to make communicating with registers
 to directly transfer the Register Definitions pages of a data sheet into your program. 
 
 # Table Of Contents
+- [Installation](#installation)
 - [Quick Example](#quick-example)
 - [Systems Overview](#systems-overview)
     - [Creating a RegisterList](#creating-a-registerlist)
@@ -15,14 +16,37 @@ to directly transfer the Register Definitions pages of a data sheet into your pr
 - [Writting Wrapper Classes](#writing-wrapper-classes)
 - [Development](#development)
     - [Running Tests](#running-tests)
+- [Distribution](#distribution)
+    - [Setup](#setup)
+    - [Steps](#steps)
+    
+# Installation
+I2C Register is available as a PIP package with the name `py-i2c-register`. 
+
+Simply use PIP to install:
+```bash
+pip install --user py-i2c-register
+```
+
+You will then be able to include the `py_i2c_register` module and its various classes:
+```python
+from py_i2c_register.register_list import RegisterList
+from py_i2c_register.register import Register
+from py_i2c_register.register_segment import RegisterSegment
+```
 
 # Quick Example
-Take these control register definitions from a data sheet:
-![Example Hardware Data Sheet Register Definitions page 1](/docs/img/example-register-defs-p1.png)
-![Example Hardware Data Sheet Register Definitions page 2](/docs/img/example-register-defs-p2.png)
+Take these control register definitions from a data sheet:  
+
+![Example Hardware Data Sheet Register Definitions page 1](https://github.com/Noah-Huppert/py-i2c-register/blob/master/docs/img/example-register-defs-p1.png?raw=true)  
+
+![Example Hardware Data Sheet Register Definitions page 2](https://github.com/Noah-Huppert/py-i2c-register/blob/master/docs/img/example-register-defs-p2.png?raw=true)
 
 With the help of the I2C Register library they can easily be represented and manipulated.
 ```python
+from py_i2c_register.register_list import RegisterList
+from py_i2c_register.register import Register
+
 # Create RegisterList instance to hold registers, device's i2c address is 0x62
 controls = RegisterList(0x62, i2c, {})
 
@@ -221,3 +245,57 @@ make test
 ```
 
 To see a more detailed HTML report you can run the `test-html` Make target. The results will then be saved to `htmlcov/index.html`.
+
+# Distribution
+This repository provides a PIP package called `py-i2c-register`. To publish this distribution a variety of helpers are 
+provided in the Makefile. 
+
+## Setup
+The [Pandoc](http://pandoc.org) tool is required for the release process along with some miscellaneous Python packages. 
+Please refer to the [Pandoc Website](http://pandoc.org/installing.html) for installation instructions. You can install the misc. Python 
+packages with the `dist-install` Make target:
+```bash
+make dist-install
+```
+
+You can verify that all distribution dependencies are install and accessible by running the `dist-check` Make target. If 
+it exits successfully all dependencies were found.
+
+Finally you must create `.pypirc` file in your home directory with the contents:
+```
+[distutils]
+index-servers=pypi
+
+[pypi]
+repository = https://upload.pypi.org/legacy/
+username = Your Username
+password = Your Password
+```
+This gives the PyPi release tool some basic configuration options and your credentials.
+
+## Steps
+This section details the steps required to release this package.
+
+1. Test
+    - Ensure that all tests pass by running the `test` Make target:
+    ```bash
+    make test 
+    ```
+2. Clean and build
+    - Clean up previous distribution materials by running the `dist-clean` Make target:
+    ```bash
+    make dist-clean
+    ```
+    - Build the distribution by running the `dist-build` Make target:
+    ```bash
+    make dist-build
+    ```
+3. Upload
+    - Upload the distribution to PyPi by running the `dist-upload` Make target:
+    ```bash
+    make dist-upload
+    ```
+    - This requires that you have a `.pypirc` file setup with your username and password
+
+The Makefile provides a useful target which runs steps 1 and 2 under one command named `dist`. However the upload step 
+must still be completed separately.

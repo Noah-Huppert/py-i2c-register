@@ -9,3 +9,5 @@ htmlcov
 # Python
 __pycache__/*
 *.py[cod]
+dist
+*.egg-info
