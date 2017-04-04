@@ -261,7 +261,7 @@ make dist-install
 You can verify that all distribution dependencies are install and accessible by running the `dist-check` Make target. If 
 it exits successfully all dependencies were found.
 
-Finally you must create `.pypirc` file in your home directory with the contents:
+Finally you must create a `.pypirc` file in your home directory with the contents:
 ```
 [distutils]
 index-servers=pypi
