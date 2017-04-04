@@ -18,8 +18,8 @@ to directly transfer the Register Definitions pages of a data sheet into your pr
 
 # Quick Example
 Take these control register definitions from a data sheet:
-![Example Hardware Data Sheet Register Definitions page 1](/docs/img/example-register-defs-p1.png)
-![Example Hardware Data Sheet Register Definitions page 2](/docs/img/example-register-defs-p2.png)
+![Example Hardware Data Sheet Register Definitions page 1](https://github.com/Noah-Huppert/py-i2c-register/blob/master/docs/img/example-register-defs-p1.png)
+![Example Hardware Data Sheet Register Definitions page 2](https://github.com/Noah-Huppert/py-i2c-register/blob/master/docs/img/example-register-defs-p2.png)
 
 With the help of the I2C Register library they can easily be represented and manipulated.
 ```python
