@@ -249,7 +249,7 @@ provided in the Makefile.
 
 ## Setup
 The [Pandoc](http://pandoc.org) tool is required for the release process along with some miscellaneous Python packages. 
-Please refer to the [Pandoc Website](http://pandoc.org) for installation instructions. You can install the misc. Python 
+Please refer to the [Pandoc Website](http://pandoc.org/installing.html) for installation instructions. You can install the misc. Python 
 packages with the `dist-install` Make target:
 ```bash
 make dist-install
