@@ -1,4 +1,4 @@
-.PHONY: check-pandoc check-pypandoc check-twine test test-html tests-install dist-check dist-install dist-build dist-info dist-upload
+.PHONY: check-pandoc check-pypandoc check-twine test test-html tests-install dist dist-check dist-install dist-build dist-info dist-upload
 
 # Log function from github.com/Noah-Huppert/make-log
 NO_COLOR=\033[0m
@@ -56,6 +56,10 @@ test-html: test
 	$(call log,ok,Detailed coverage report avaliable at htmlcov/index.html)
 
 # Distribution
+# One in all target that does most of the work
+dist: dist-check test dist-clean dist-build
+	$(call log,ok,Now double check the build and run the dist-upload Make target)
+
 # Check packages required to distribute are installed
 dist-check: check-pypandoc check-twine
 

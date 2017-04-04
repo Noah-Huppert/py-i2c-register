@@ -296,3 +296,6 @@ This section details the steps required to release this package.
     make dist-upload
     ```
     - This requires that you have a `.pypirc` file setup with your username and password
+
+The Makefile provides a useful target which runs steps 1 and 2 under one command named `dist`. However the upload step 
+must still be completed separately.
