@@ -99,3 +99,38 @@ class TestRegisterSegmentUpdateBits(unittest.TestCase):
         seg = RegisterSegment("NAME", 9, 11, [0] * 3)
         seg.update_bits([213, 170])
         self.assertEqual(seg.bits, [1, 0, 1])
+
+    def test_not_enough_bits(self):
+        seg = RegisterSegment("NAME", 9, 11, [0] * 3)
+        with self.assertRaises(KeyError):
+            seg.update_bits([240])
+
+class TestRegisterSegmentSetBits(unittest.TestCase):
+    def test_perfect(self):
+        seg = RegisterSegment("NAME", 0, 2, [0] * 3)
+        seg.set_bits([1, 1, 0])
+        self.assertEqual(seg.bits, [1, 1, 0])
+
+    def test_too_many_bits(self):
+        seg = RegisterSegment("NAME", 0, 2, [0] * 3)
+        with self.assertRaises(IndexError):
+            seg.set_bits([0, 1, 0, 1])
+
+    def test_too_few_bits(self):
+        seg = RegisterSegment("NAME", 0, 2, [0] * 3)
+        with self.assertRaises(IndexError):
+            seg.set_bits([0])
+
+    def test_bit_value_err(self):
+        seg = RegisterSegment("NAME", 0, 2, [0] * 3)
+        with self.assertRaises(ValueError):
+            seg.set_bits([1, 2, 3])
+
+class TestRegisterSegmentGenericMethods(unittest.TestCase):
+    def test_str(self):
+        seg = RegisterSegment("NAME", 0, 2, [0] * 3)
+        self.assertEqual(str(seg), "RegisterSegment<name=NAME, lsb_i=0, msb_i=2, bits=[0, 0, 0]>")
+
+    def test_len(self):
+        seg = RegisterSegment("NAME", 0, 2, [0] * 3)
+        self.assertEqual(len(seg), 3)

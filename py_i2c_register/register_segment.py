@@ -191,12 +191,7 @@ class RegisterSegment():
 
             # Convert bits and check bits are all 0 or 1
             for i in range(len(converted_bits)):
-                bit = int(converted_bits[i])
-
-                if bit != 0 and bit != 1:
-                    raise ValueError("Bits can only have the value 0 or 1, was: {}, bit_i: {}, byte_i: {}".format(bit, i, byte_i))
-
-                converted_bits[i] = bit
+                converted_bits[i] = int(converted_bits[i])
 
             needed_bytes_as_bits.append(converted_bits)
 
@@ -205,8 +200,6 @@ class RegisterSegment():
             in_byte_i = int(math.floor(float(bit_i) / 8.0))
             bit_offset = (in_byte_i * 8)  # Used to figure out which bit in the byte we are in
 
-            # TODO: Figure out index mapping b/c binary counts from right to left and array indexes count from left to right
-            # This could effect more than just this issue, look at failing tests
             self.bits[bit_i - self.lsb_i] = needed_bytes_as_bits[in_byte_i - start_byte][bit_i - bit_offset]
 
     """Set Segment bits
