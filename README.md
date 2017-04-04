@@ -1,4 +1,4 @@
-# Python I2C Register [![Build Status](https://travis-ci.org/Noah-Huppert/py-i2c-register.svg?branch=master)](https://travis-ci.org/Noah-Huppert/py-i2c-register) [![Test Coverage](https://codeclimate.com/github/Noah-Huppert/py-i2c-register/badges/coverage.svg)](https://codeclimate.com/github/Noah-Huppert/py-i2c-register/coverage) [![Code Climate](https://codeclimate.com/github/Noah-Huppert/py-i2c-register/badges/gpa.svg)](https://codeclimate.com/github/Noah-Huppert/py-i2c-register)
+# Python I2C Register [![Build Status](https://travis-ci.org/Noah-Huppert/py-i2c-register.svg?branch=master)](https://travis-ci.org/Noah-Huppert/py-i2c-register) [![Test Coverage](https://codeclimate.com/github/Noah-Huppert/py-i2c-register/badges/coverage.svg)](https://codeclimate.com/github/Noah-Huppert/py-i2c-register/coverage)
 Python wrapper library around the common I2C controller register pattern. 
 
 I2C Register is a python library which aims to make communicating with registers on I2C devices dead simple. It is meant 
