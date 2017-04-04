@@ -94,3 +94,8 @@ class TestRegisterSegmentUpdateBits(unittest.TestCase):
         seg = RegisterSegment("NAME", 0, 2, [0] * 3)
         seg.update_bits([213, 170])
         self.assertEqual(seg.bits, [1, 0, 1])
+
+    def test_in_second_byte(self):
+        seg = RegisterSegment("NAME", 9, 11, [0] * 3)
+        seg.update_bits([213, 170])
+        self.assertEqual(seg.bits, [1, 0, 1])
