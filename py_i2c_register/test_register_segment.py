@@ -1,6 +1,6 @@
 import unittest
-from unittest.mock import MagicMock
-from unittest.mock import patch
+from mock import MagicMock
+from mock import patch
 from py_i2c_register.register_segment import RegisterSegment
 
 class TestRegisterSegmentToBits(unittest.TestCase):
