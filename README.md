@@ -44,6 +44,9 @@ Take these control register definitions from a data sheet:
 
 With the help of the I2C Register library they can easily be represented and manipulated.
 ```python
+from py_i2c_register.register_list import RegisterList
+from py_i2c_register.register import Register
+
 # Create RegisterList instance to hold registers, device's i2c address is 0x62
 controls = RegisterList(0x62, i2c, {})
 
