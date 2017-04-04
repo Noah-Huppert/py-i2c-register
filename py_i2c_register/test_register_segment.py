@@ -1,5 +1,5 @@
 import unittest
-from mock import MagicMock
+
 from mock import patch
 from py_i2c_register.register_segment import RegisterSegment
 

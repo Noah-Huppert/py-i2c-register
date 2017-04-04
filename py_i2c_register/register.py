@@ -81,8 +81,8 @@ class Register():
                 raise SystemError("Failed to read i2c: {}".format(e))
 
             # Loop through each byte read and map to elements in RegisterSegment bit arrays
-            for k, segment in self.segments.iteritems():
-                segment.update_bits(read_bytes)  # Raises KeyError if we didn't read enough bytes
+            for segment in self.segments:
+                self.segments[segment].update_bits(read_bytes)  # Raises KeyError if we didn't read enough bytes
 
         else:
             raise AttributeError("Register {} is not set up to allow read operations, op_mode: \"{}\"".format(self.name, self.op_mode))
@@ -190,7 +190,7 @@ class Register():
     """
     def __len__(self):
         l = 0
-        for k, segment in self.segments.iteritems():
-            l += len(segment)
+        for segment in self.segments:
+            l += len(self.segments[segment])
 
         return l
