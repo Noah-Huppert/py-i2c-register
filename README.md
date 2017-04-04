@@ -273,12 +273,12 @@ This gives the PyPi release tool some basic configuration options and your crede
 ## Steps
 This section details the steps required to release this package.
 
-- 1. Test
+1. Test
     - Ensure that all tests pass by running the `test` Make target:
     ```bash
     make test 
     ```
-- 2. Clean and build
+2. Clean and build
     - Clean up previous distribution materials by running the `dist-clean` Make target:
     ```bash
     make dist-clean
@@ -287,7 +287,7 @@ This section details the steps required to release this package.
     ```bash
     make dist-build
     ```
-- 3. Upload
+3. Upload
     - Upload the distribution to PyPi by running the `dist-upload` Make target:
     ```bash
     make dist-upload
