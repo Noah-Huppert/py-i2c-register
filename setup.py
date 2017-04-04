@@ -41,7 +41,7 @@ setup(
 
     packages=find_packages(exclude=["contrib", "docs", "tests"]),
 
-    install_requires=["pypandoc"],
+    install_requires=[],
     package_data={},
     data_files=[
         ("", ["README.md"])

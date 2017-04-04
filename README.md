@@ -15,6 +15,7 @@ to directly transfer the Register Definitions pages of a data sheet into your pr
 - [Writting Wrapper Classes](#writing-wrapper-classes)
 - [Development](#development)
     - [Running Tests](#running-tests)
+- [Distribution](#distribution)
 
 # Quick Example
 Take these control register definitions from a data sheet:  
@@ -223,3 +224,9 @@ make test
 ```
 
 To see a more detailed HTML report you can run the `test-html` Make target. The results will then be saved to `htmlcov/index.html`.
+
+# Distribution
+This repository provides a PIP package called `py-i2c-register`. To publish this distribution a variety of helpers are 
+provided in the Makefile. 
+
+TODO: document release process, add a checklist!
