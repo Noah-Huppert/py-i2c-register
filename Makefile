@@ -74,7 +74,7 @@ dist-build: dist-check
 	$(call log,ok,Building distribution)
 	python setup.py sdist
 
-# Build package information
+# Build only package information
 dist-info: dist-check
 	$(call log,ok,Building package information)
 	python setup.py egg_info
