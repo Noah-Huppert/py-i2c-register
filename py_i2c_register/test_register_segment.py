@@ -5,7 +5,7 @@ from py_i2c_register.register_segment import RegisterSegment
 
 class TestRegisterSegmentToBits(unittest.TestCase):
     def test_pos_in_range(self):
-        self.assertEqual(RegisterSegment.to_bits(12, 8), [0, 0, 0, 0, 1, 1, 0, 0])
+        self.assertEqual(RegisterSegment.to_bits(12, 8), [0, 0, 1, 1, 0, 0, 0, 0])
 
     def test_pos_out_range(self):
         with self.assertRaises(ValueError):
@@ -17,11 +17,14 @@ class TestRegisterSegmentToBits(unittest.TestCase):
 
 class TestRegisterSegmentToInt(unittest.TestCase):
     def test_number(self):
-        self.assertEqual(RegisterSegment.to_int([0, 0, 0, 0, 1, 1, 0, 0]), 12)
+        self.assertEqual(RegisterSegment.to_int([0, 0, 1, 1, 0, 0, 0, 0]), 12)
 
 class TestRegisterSegmentToTwosCompInt(unittest.TestCase):
-    def test_number(self):
-        self.assertEqual(RegisterSegment.to_twos_comp_int([1, 1, 1, 1, 1, 0, 1, 0]), -6)
+    def test_neg_number(self):
+        self.assertEqual(RegisterSegment.to_twos_comp_int([0, 1, 0, 1, 1, 1, 1, 1]), -6)
+
+    def test_pos_number(self):
+        self.assertEqual(RegisterSegment.to_twos_comp_int([0, 0, 1, 1, 0, 0, 0, 0]), 12)
 
 class TestRegisterSegmentNumBytesForBits(unittest.TestCase):
     def test_lower_range(self):
@@ -41,16 +44,16 @@ class TestRegisterSegmentToPaddedByteArr(unittest.TestCase):
         self.assertEqual(RegisterSegment.to_padded_byte_arr([]), [])
 
     def test_one_byte_perfect_fit(self):
-        self.assertEqual(RegisterSegment.to_padded_byte_arr([0, 0, 0, 0, 1, 1, 0, 0]), [12])
+        self.assertEqual(RegisterSegment.to_padded_byte_arr([0, 0, 1, 1, 0, 0, 0, 0]), [12])
 
     def test_one_byte_partial_fit(self):
-        self.assertEqual(RegisterSegment.to_padded_byte_arr([1, 1, 1, 1]), [240])
+        self.assertEqual(RegisterSegment.to_padded_byte_arr([1, 1, 1, 1]), [15])
 
     def test_two_bytes_partial_fit(self):
-        self.assertEqual(RegisterSegment.to_padded_byte_arr([1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1]), [170, 80])
+        self.assertEqual(RegisterSegment.to_padded_byte_arr([1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1]), [85, 10])
 
     def test_two_bytes_perfect_fit(self):
-        self.assertEqual(RegisterSegment.to_padded_byte_arr([0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0]), [85, 170])
+        self.assertEqual(RegisterSegment.to_padded_byte_arr([0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0]), [170, 85])
 
 class TestRegisterSegmentInit(unittest.TestCase):
     def test_perfect(self):
@@ -89,5 +92,5 @@ class TestRegisterSegmentProxyMethods(unittest.TestCase):
 class TestRegisterSegmentUpdateBits(unittest.TestCase):
     def test_perfect(self):
         seg = RegisterSegment("NAME", 0, 2, [0] * 3)
-        seg.update_bits([80, 170])
-        self.assertEqual(seg.bits, [0, 1, 0])
+        seg.update_bits([213, 170])
+        self.assertEqual(seg.bits, [1, 0, 1])

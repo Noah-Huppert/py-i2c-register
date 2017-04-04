@@ -28,7 +28,7 @@ class RegisterSegment():
 
         bits = []
         for bit in format(number, "0{}b".format(size)):
-            bits.append(int(bit))
+            bits.insert(0, int(bit))
 
         return bits
 
@@ -42,7 +42,8 @@ class RegisterSegment():
     @staticmethod
     def to_int(bits):
         out = 0
-        for bit in bits:
+        l = len(bits)
+        for bit in reversed(bits):
             out = (out << 1) | bit
 
         return out
@@ -58,7 +59,7 @@ class RegisterSegment():
     def to_twos_comp_int(bits):
         bits_str = ""
 
-        for b in bits:
+        for b in reversed(bits):
             bits_str += str(b)
 
         size = len(bits)
@@ -112,6 +113,7 @@ class RegisterSegment():
 
 
             # Convert
+            # Add 1 to byte_slice_upper because upper range of slice is not inclusive
             byte_slice = bits[byte_slice_lower:byte_slice_upper + 1]
 
             # Append padding
@@ -189,8 +191,7 @@ class RegisterSegment():
 
             # Convert bits and check bits are all 0 or 1
             for i in range(len(converted_bits)):
-                bit = converted_bits[i]
-                bit = int(bit)
+                bit = int(converted_bits[i])
 
                 if bit != 0 and bit != 1:
                     raise ValueError("Bits can only have the value 0 or 1, was: {}, bit_i: {}, byte_i: {}".format(bit, i, byte_i))
@@ -204,9 +205,9 @@ class RegisterSegment():
             in_byte_i = int(math.floor(float(bit_i) / 8.0))
             bit_offset = (in_byte_i * 8)  # Used to figure out which bit in the byte we are in
 
-            // TODO: Figure out index mapping b/c binary counts from right to left and array indexes count from left to right
-            // This could effect more than just this issue, look at failing tests
-            self.bits[bit_i - self.lsb_i] = needed_bytes_as_bits[in_byte_i - start_byte][bit_i - bit_offset - 1]
+            # TODO: Figure out index mapping b/c binary counts from right to left and array indexes count from left to right
+            # This could effect more than just this issue, look at failing tests
+            self.bits[bit_i - self.lsb_i] = needed_bytes_as_bits[in_byte_i - start_byte][bit_i - bit_offset]
 
     """Set Segment bits
     Runs some sanity checks on the new bits before setting them.
