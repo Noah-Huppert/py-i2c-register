@@ -93,3 +93,40 @@ class TestRegisterRead(unittest.TestCase):
         with self.assertRaises(SystemError):
             reg.read(i2c)
 
+class TestRegisterWrite(unittest.TestCase):
+    def setUp(self):
+        self.reg = Register("NAME", 1, 2, Register.WRITE, {})
+        self.reg.add("SEG_NAME", 0, 2, [0] * 3)
+
+        self.i2c = MagicMock()
+        self.i2c.writeBytes = MagicMock(return_value=None)
+
+    def test_perfect(self):
+        self.reg.get("SEG_NAME").bits = [0, 1, 1]
+
+        self.reg.write(self.i2c)
+        self.i2c.writeBytes.assert_called_once_with(1, 2, [6])
+
+    def test_not_setup_to_write(self):
+        self.reg.op_mode = Register.READ
+
+        with self.assertRaises(AttributeError):
+            self.reg.write(self.i2c)
+
+    def test_non_cont_seg_bits(self):
+        self.reg.add("BAD_SEG", 9, 11, [0] * 3)
+
+        with self.assertRaises(SyntaxError):
+            self.reg.write(self.i2c)
+
+    def test_multiple_segments_managing_same_bit(self):
+        self.reg.add("BAD_SEG", 2, 5, [0] * 4)
+
+        with self.assertRaises(KeyError):
+            self.reg.write(self.i2c)
+
+    def test_i2c_write_fail(self):
+        self.i2c.writeBytes.return_value = 1
+
+        with self.assertRaises(SystemError):
+            self.reg.write(self.i2c)

@@ -106,7 +106,9 @@ class Register():
             managing_segment = {}
             max_bit_i = 0
 
-            for k, segment in self.segments.iteritems():
+            for segment in self.segments:
+                segment = self.segments[segment]
+
                 for bit_i in range(len(segment.bits)):
                     actual_bit_i = bit_i + segment.lsb_i
                     # Record maximum bit index for continuous test later
@@ -150,14 +152,15 @@ class Register():
 
             # Convert from bits map to bits array
             bits_arr = []
-            for k, v in bits.iteritems():
-                bits_arr.append(v)
+            for key in bits:
+                bit = bits[key]
+                bits_arr.append(bit)
 
             # Create bytes array
             bytes_arr = RegisterSegment.to_padded_byte_arr(bits_arr)
 
             # Write to i2c
-            write_status = i2c.writeBytes(self.dev_addr, self.reg_addr, bits_arr)
+            write_status = i2c.writeBytes(self.dev_addr, self.reg_addr, bytes_arr)
 
             if write_status == 1:
                 raise SystemError("Failed to write to i2c")
