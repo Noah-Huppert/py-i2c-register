@@ -118,6 +118,25 @@ class TestRegisterListProxyMethods(unittest.TestCase):
 
         self.lst.set_bits.assert_called_once_with("REG1", "SEG1", [1, 1, 0], write_after=True, write_fn=mock_write)
 
+    def test_read(self):
+        reg1 = self.lst.get("REG1")
+        reg1.read = MagicMock(side_effect=reg1.read)
+
+        self.lst.read("REG1")
+
+        reg1.read.assert_called_once_with(self.i2c)
+        self.assertEqual(self.lst.to_int("REG1", "SEG1"), 2)
+
+    def test_write(self):
+        reg1 = self.lst.get("REG1")
+        reg1.write = MagicMock(side_effect=reg1.write)
+
+        self.lst.set_bits("REG1", "SEG1", [1, 1, 0])
+        self.lst.write("REG1")
+
+        reg1.write.assert_called_once_with(self.i2c)
+        self.i2c.writeBytes.assert_called_once_with(1, 1, [3])
+
 class TestRegisterListAdd(unittest.TestCase):
     def setUp(self):
         self.i2c = MagicMock()
@@ -174,3 +193,11 @@ class TestRegisterListGet(unittest.TestCase):
         with self.assertRaises(KeyError):
             self.lst.get("DOES_NOT_EXIST")
 
+class TestRegisterListGenericMethods(unittest.TestCase):
+    def test_str(self):
+        i2c = MagicMock()
+        lst = RegisterList(1, i2c, {})
+        lst.add("REG1", 1, Register.READ, {})\
+            .add("SEG1", 0, 2, [0] * 3)
+
+        self.assertEqual(str(lst), "RegisterList<device_address=1, registers={\n    REG1=Register<name=REG1, address=1, op_mode=READ, segments={\n        SEG1=RegisterSegment<name=SEG1, lsb_i=0, msb_i=2, bits=[0, 0, 0]>\n    }>\n}>")

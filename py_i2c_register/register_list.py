@@ -157,9 +157,10 @@ class RegisterList():
         - str: String representation of RegisterList
     """
     def __str__(self):
-        out = "RegisterList<device_address={}, registers={{\n".format(self.device_address)
+        out = "RegisterList<device_address={}, registers={{\n".format(self.dev_addr)
 
-        for k, v in self.registers.iteritems():
+        for k in self.registers:
+            v = self.registers[k]
             # Indent output from Register.str
             v = str(v)
             v = v.split("\n")
