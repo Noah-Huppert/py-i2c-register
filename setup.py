@@ -13,7 +13,7 @@ except(IOError, ImportError) as e:
 
 setup(
     name="py-i2c-register",
-    version="0.0.3",
+    version="0.0.4",
     description="Python wrapper library around the common I2C controller register pattern.",
     long_description=long_description,
     url="https://github.com/Noah-Huppert/py-i2c-register",
