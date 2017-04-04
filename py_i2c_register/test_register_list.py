@@ -3,6 +3,7 @@ from mock import MagicMock
 
 from py_i2c_register.register_list import RegisterList
 from py_i2c_register.register import Register
+from py_i2c_register.register_segment import RegisterSegment
 
 class TestRegisterListInit(unittest.TestCase):
     def test_perfect(self):
@@ -116,3 +117,60 @@ class TestRegisterListProxyMethods(unittest.TestCase):
         self.lst.set_bits_from_int("REG1", "SEG1", 3, write_after=True, write_fn=mock_write)
 
         self.lst.set_bits.assert_called_once_with("REG1", "SEG1", [1, 1, 0], write_after=True, write_fn=mock_write)
+
+class TestRegisterListAdd(unittest.TestCase):
+    def setUp(self):
+        self.i2c = MagicMock()
+
+        self.lst = RegisterList(1, self.i2c, {})
+
+    def test_add_perfect(self):
+       self.lst.add("REG1", 1, "OP_MODE", {"key": "value"})
+
+       reg = self.lst.get("REG1")
+       self.assertEqual(reg.name, "REG1")
+       self.assertEqual(reg.dev_addr, 1)
+       self.assertEqual(reg.op_mode, "OP_MODE")
+       self.assertEquals(reg.segments, {"key": "value"})
+
+    def test_add_already_exists(self):
+        self.lst.add("REG1", 1, Register.READ, {})
+
+        with self.assertRaises(KeyError):
+            self.lst.add("REG1", 1, Register.READ, {})
+
+class TestRegisterListGet(unittest.TestCase):
+    def setUp(self):
+        self.i2c = MagicMock()
+        self.i2c.readBytes = MagicMock(return_value=[213])
+
+        self.lst = RegisterList(1, self.i2c, {})
+        self.seg1 = RegisterSegment("SEG1", 0, 2, [0] * 3)
+        self.lst.add("REG1", 1, Register.READ, {"SEG1": self.seg1})
+
+    def test_perfect_read_first(self):
+        reg = self.lst.get("REG1", read_first=True)
+        self.assertEqual(reg.name, "REG1")
+        self.assertEqual(reg.dev_addr, 1)
+        self.assertEqual(reg.op_mode, Register.READ)
+
+        self.assertEquals(reg.segments["SEG1"], self.seg1)
+
+        self.i2c.readBytes.assert_called_once_with(1, 1, 1)
+        self.assertEqual(self.lst.get("REG1").get("SEG1").bits, [1, 0, 1])
+
+    def test_perfect_dont_read_first(self):
+        reg = self.lst.get("REG1", read_first=False)
+        self.assertEqual(reg.name, "REG1")
+        self.assertEqual(reg.dev_addr, 1)
+        self.assertEqual(reg.op_mode, Register.READ)
+
+        self.assertEqual(reg.segments["SEG1"], self.seg1)
+
+        self.i2c.readBytes.assert_not_called()
+        self.assertEqual(self.lst.get("REG1").get("SEG1").bits, [0, 0, 0])
+
+    def test_keyerror(self):
+        with self.assertRaises(KeyError):
+            self.lst.get("DOES_NOT_EXIST")
+

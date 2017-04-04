@@ -97,7 +97,7 @@ class RegisterList():
         - KeyError: If register with name already exists
     """
     def add(self, name, address, op_mode, segments):
-        if name in segments:
+        if name in self.registers:
             raise KeyError("RegisterSegment with name already exists: name: {}".format(name))
 
         self.registers[name] = Register(name, self.dev_addr, address, op_mode, segments)
