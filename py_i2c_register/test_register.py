@@ -1,6 +1,7 @@
 import unittest
 
 from mock import MagicMock
+from mock import patch
 
 from py_i2c_register.register import Register
 from py_i2c_register.register_segment import RegisterSegment
@@ -40,6 +41,11 @@ class TestRegisterProxyMethods(unittest.TestCase):
         self.reg.get("SEG_NAME").set_bits = MagicMock()
         self.reg.set_bits("SEG_NAME", [1, 0, 1])
         self.reg.get("SEG_NAME").set_bits.called_once_with([1, 0, 1])
+
+    @patch("py_i2c_register.register_segment.RegisterSegment.num_bytes_for_bits")
+    def test_len_bytes(self, fn):
+        self.reg.len_bytes()
+        fn.assert_called_once_with(len(self.reg))
 
 class TestRegisterAdd(unittest.TestCase):
     def test_perfect(self):
@@ -125,8 +131,29 @@ class TestRegisterWrite(unittest.TestCase):
         with self.assertRaises(KeyError):
             self.reg.write(self.i2c)
 
+    def test_multiple_segments_managing_same_bit_more_than_one_bit(self):
+        self.reg.add("BAD_SEG1", 2, 5, [0] * 4)
+        self.reg.add("BAD_SEG2", 5, 7, [0] * 3)
+
+        with self.assertRaises(KeyError):
+            self.reg.write(self.i2c)
+
     def test_i2c_write_fail(self):
         self.i2c.writeBytes.return_value = 1
 
         with self.assertRaises(SystemError):
             self.reg.write(self.i2c)
+
+class TestRegisterGenericMethods(unittest.TestCase):
+    def test_str(self):
+        reg = Register("NAME", 1, 2, "OP_MODE", {})
+        reg.add("SEG_NAME", 0, 2, [0] * 3)
+
+        self.assertEqual(str(reg), "Register<name=NAME, address=2, op_mode=OP_MODE, segments={\n    SEG_NAME=RegisterSegment<name=SEG_NAME, lsb_i=0, msb_i=2, bits=[0, 0, 0]>\n}>")
+
+    def test_len(self):
+        reg = Register("NAME", 1, 2, "OP_MODE", {})
+        reg.add("SEG1", 0, 2, [0] * 3)
+        reg.add("SEG2", 3, 5, [0] * 3)
+
+        self.assertEqual(len(reg), 6)

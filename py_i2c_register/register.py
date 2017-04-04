@@ -174,8 +174,9 @@ class Register():
     def __str__(self):
         out = "Register<name={}, address={}, op_mode={}, segments={{\n".format(self.name, self.reg_addr, self.op_mode)
 
-        for k, v in self.segments.iteritems():
-            out += "    {}={}\n".format(k, str(v))
+        for key in self.segments:
+            segment = self.segments[key]
+            out += "    {}={}\n".format(key, str(segment))
 
         out += "}>"
         return out
