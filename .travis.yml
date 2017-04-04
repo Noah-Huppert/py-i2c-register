@@ -2,7 +2,7 @@ language: python
 python:
     - "2.7"
     - "3.6"
-install: "make test-install"
+install: "pip install -r test-requirements.txt"
 script: "make test"
 after_success: "CODECLIMATE_REPO_TOKEN=$CODE_CLIMATE_TOKEN codeclimate-test-reporter"
 env:
