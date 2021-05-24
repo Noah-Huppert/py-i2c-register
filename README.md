@@ -1,8 +1,9 @@
-# Python I2C Register [![Build Status](https://travis-ci.org/Noah-Huppert/py-i2c-register.svg?branch=master)](https://travis-ci.org/Noah-Huppert/py-i2c-register) [![Test Coverage](https://codeclimate.com/github/Noah-Huppert/py-i2c-register/badges/coverage.svg)](https://codeclimate.com/github/Noah-Huppert/py-i2c-register/coverage) [![PyPI version](https://badge.fury.io/py/py-i2c-register.svg)](https://badge.fury.io/py/py-i2c-register)
+[![Build Status](https://travis-ci.org/Noah-Huppert/py-i2c-register.svg?branch=master)](https://travis-ci.org/Noah-Huppert/py-i2c-register) [![Test Coverage](https://codeclimate.com/github/Noah-Huppert/py-i2c-register/badges/coverage.svg)](https://codeclimate.com/github/Noah-Huppert/py-i2c-register/coverage) [![PyPI version](https://badge.fury.io/py/py-i2c-register.svg)](https://badge.fury.io/py/py-i2c-register)
+
+# Python I2C Register
 Python wrapper library around the common I2C controller register pattern.
 
-I2C Register is a python library which aims to make communicating with registers on I2C devices dead simple. It is meant
-to directly transfer the Register Definitions pages of a data sheet into your program.
+I2C Register is a python library which aims to make communicating with registers on I2C devices dead simple. It is meant to directly transfer the Register Definitions pages of a data sheet into your program.
 
 # Table Of Contents
 - [Installation](#installation)
@@ -24,11 +25,13 @@ to directly transfer the Register Definitions pages of a data sheet into your pr
 I2C Register is available as a PIP package with the name `py-i2c-register`.
 
 Simply use PIP to install:
+
 ```bash
 pip install --user py-i2c-register
 ```
 
 You will then be able to include the `py_i2c_register` module and its various classes:
+
 ```python
 from py_i2c_register.register_list import RegisterList
 from py_i2c_register.register import Register
@@ -39,6 +42,7 @@ from py_i2c_register.register_segment import RegisterSegment
 Take these control register definitions from a data sheet: [page 1](https://github.com/Noah-Huppert/py-i2c-register/blob/master/docs/img/example-register-defs-p1.png?raw=true), [page 2](https://github.com/Noah-Huppert/py-i2c-register/blob/master/docs/img/example-register-defs-p2.png?raw=true)
 
 With the help of the I2C Register library they can easily be represented and manipulated.
+
 ```python
 from py_i2c_register.register_list import RegisterList
 from py_i2c_register.register import Register
@@ -78,85 +82,70 @@ velocity = controls.to_twos_comp_int("VELOCITY", "VELOCITY", read_first=True)
 ```
 
 # Systems Overview
-The main class this library provides is the `RegisterList` class. This class manages a list of
-`Register` definitions. It also provides some useful helper methods to make performing certain common actions quick and
-easy.
+The main class this library provides is the `RegisterList` class. This class manages a list of `Register` definitions. It also provides some useful helper methods to make performing certain common actions quick and easy.
 
 ## Creating a RegisterList
-To create a `RegisterList` import the `register_list.RegisterList` class. Then call the constructor giving it a I2C device
-address, an [I2C Object](/docs/i2c-object.md), and any `Register`s you have already defined:
+To create a `RegisterList` import the `register_list.RegisterList` class. Then call the constructor giving it a I2C device address, an [I2C Object](/docs/i2c-object.md), and any `Register` objects you have already defined:
+
 ```python
 from py_i2c_register.register_list import RegisterList
 controls = RegisterList(0x62, i2c, {})
 ```
-The provided I2C Device address will be used to contact the device which holds the registers over I2C. The [I2C Object](/docs/i2c-object.md)
-depends on your platform, see the [documentation](/docs/i2c-object.md) for more information. In most cases you can provide
-an empty `Register` map as well.
+
+The provided I2C Device address will be used to contact the device which holds the registers over I2C. The [I2C Object](/docs/i2c-object.md) depends on your platform, see the [documentation](/docs/i2c-object.md) for more information. In most cases you can provide an empty `Register` map as well.
 
 ## Defining Registers
-After you create a `RegisterList` you must define some `Register`s to control. A `Register` is defined by a name (for
-easy programmatic access), an I2C address, and a string containing IO operation permissions. The `RegisterList` class
-provides a useful `add(reg_name, reg_addr, reg_permissions, reg_segments)` method for adding `Register`s.
+After you create a `RegisterList` you must define some registers to control. A `Register` is defined by a name (for easy programmatic access), an I2C address, and a string containing IO operation permissions. The `RegisterList` class provides a useful `add(reg_name, reg_addr, reg_permissions, reg_segments)` method for adding `Register` objects.
+
 ```python
 from py_i2c_register.register import Register
 controls.add("REGISTER_NAME", 0x00, Registers.READ + Register.WRITE, {})
 ```
+
 This would define a `Register` with the name `REGISTER_NAME`, the address `0x00` and the permission to read and write to/from it.
 
 ## Adding RegisterSegments
-To actually read or write to/from a `Register` you need to define at least one `RegisterSegment`. These describe how bits
-read from registers map to sub values. This could be useful if a device for example: provides a health register and each
-bit represents a different system's health. You define `RegisterSegment`s by giving a name (for easy programmatic access)
-and the index of the segment's least and most significant bits. The previously mentioned `RegisterList.add()` method
-returns the `Register` that it just created. You can then in turn use a similar helper method that `Register` provides
-called `add(seg_name, lsb_i, msb_i, default_bits)`:
+To actually read or write to/from a `Register` you need to define at least one `RegisterSegment`. These describe how bits read from registers map to sub values. This could be useful if a device for example: provides a health register and each bit represents a different system's health. You define `RegisterSegment`s by giving a name (for easy programmatic access) and the index of the segment's least and most significant bits. The previously mentioned `RegisterList.add()` method returns the `Register` that it just created. You can then in turn use a similar helper method that `Register` provides called `add(seg_name, lsb_i, msb_i, default_bits)`:
+
 ```python
 controls.add("HEALTH", 0x00, Registers.READ, {})\
     .add("LEFT_MOTOR_FLAG", 2, 2, [0])\
     .add("RIGHT_MOTOR_FLAG", 1, 1, [0])\
     .add("NETWORK_FLAG", 0, 0, [0])
 ```
-This would define a `Register` named `HEALTH` at address `0x00` with read permissions. This `Register` would have 3
-`RegisterSegment`s. These 3 register segments would look at bits 0, 1, and 2 for the status of the left and right motors as
-well as some made up network module.
+
+This would define a `Register` named `HEALTH` at address `0x00` with read permissions. This `Register` would have 3 `RegisterSegment`s. These 3 register segments would look at bits 0, 1, and 2 for the status of the left and right motors as well as some made up network module.
 
 ## Reading from RegisterSegments
-The `RegisterList` provides some useful helper methods for reading `RegisterSegment`s as integer values. They are called
-`to_int` and `to_twos_comp_int`. They both take the name of a `Register` and `RegisterSegment` to read. Optionally you can
-pass a `read_first` value. When `True` these methods will read the `Register` off the I2C device before returning the
-`RegisterSegment` value:
+The `RegisterList` provides some useful helper methods for reading `RegisterSegment`s as integer values. They are called `to_int` and `to_twos_comp_int`. They both take the name of a `Register` and `RegisterSegment` to read. Optionally you can pass a `read_first` value. When `True` these methods will read the `Register` off the I2C device before returning the `RegisterSegment` value:
+
 ```python
 network_status = controls.to_int("HEALTH", "NETWORK_FLAG", read_first=True)
 velocity = controls.to_twos_comp_int("VELOCITY", "VELOCITY", read_first=True)
 ```
+
 This would read the `NETWORK_FLAG` segment of the `HEALTH` register and the `VELOCITY` segment of the `VELOCITY` register.
 
-Ontop of using `RegisterList`s helper methods one can access raw `RegisterSegment` values via the `RegisterSegment.bits`
-array. This array contains the raw `0` or `1` values of the register. Just be sure to call `Register.read` before accessing
-the `RegisterSegment.bits` array:
+Ontop of using `RegisterList`s helper methods one can access raw `RegisterSegment` values via the `RegisterSegment.bits` array. This array contains the raw `0` or `1` values of the register. Just be sure to call `Register.read` before accessing the `RegisterSegment.bits` array:
+
 ```python
 controls.get("VELOCITY").read()
 velocity_bits = controls.get("VELOCITY").get("VELOCITY").bits
 ```
 
 ## Writing to RegisterSegments
-The `RegisterList` class provides the `set_bits` and `set_bits_from_int` helper methods. Similar to the reading helper
-methods mentioned above `set_bits` and `set_bits_from_int` both also take a `Register` and `RegisterSegment` name as
-their first two parameters. The third value of both functions is the value to set. In the case of the `set_bits` method
-it is expected to be an array of bits to set. In the case of the `set_bits_from_int` method it is expected to be an integer
-value to set. The `set_bits` and `set_bits_from_int` methods also offer an optional `write_after` flag. If `True` they will
-write the value of the `Register` to the I2C device after the value has been set.
+The `RegisterList` class provides the `set_bits` and `set_bits_from_int` helper methods. Similar to the reading helper methods mentioned above `set_bits` and `set_bits_from_int` both also take a `Register` and `RegisterSegment` name as their first two parameters. The third value of both functions is the value to set. In the case of the `set_bits` method it is expected to be an array of bits to set. In the case of the `set_bits_from_int` method it is expected to be an integer value to set. The `set_bits` and `set_bits_from_int` methods also offer an optional `write_after` flag. If `True` they will write the value of the `Register` to the I2C device after the value has been set.
+
 ```python
 controls.set_bits("ACQ_COMMAND", "ACQ_COMMAND", [0, 0, 0, 0, 0, 1, 0, 0], write_after=True)
 controls.set_bits_from_int("ACQ_COMMAND", "ACQ_COMMAND", 0x04, write_after=True)
 ```
-This would set the `ACQ_COMMAND` segment of the `ACQ_COMMAND` register to the value `0x04` using the `set_bits` and
-`set_bits_from_int` methods.
+
+This would set the `ACQ_COMMAND` segment of the `ACQ_COMMAND` register to the value `0x04` using the `set_bits` and `set_bits_from_int` methods.
 
 # Writing Wrapper Classes
-I2C Register's simple architecture lends itself well to being used in hardware wrapper classes. All one must do is
-create a class with its own `RegisterList` instance. Then add `Register` and `RegisterSegment` definitions in the `__init__()`
-method:
+I2C Register's simple architecture lends itself well to being used in hardware wrapper classes. All one must do is create a class with its own `RegisterList` instance. Then add `Register` and `RegisterSegment` definitions in the `__init__()` method:
+
 ```python
 from py_i2c_register.register_list import RegisterList
 from py_i2c_register.register import Register
@@ -224,18 +213,19 @@ while True:
 ```
 
 # Development
-The code for I2C Register is located in the `py_i2c_register` directory. Feel free to contribute by opening a pull
-request. I try to test and document as much as I can.
+The code for I2C Register is located in the `py_i2c_register` directory. Feel free to contribute by opening a pull request. I try to test and document as much as I can.
 
-Supported Python Versions: 2.7, 3.6
+The code was written when Python 3.6 was recent (and Python 2.7 was supported and not deprecated).
 
 ## Running Tests
 To run tests a couple python packages are required. To install them you can run the `test-install` Make target:
+
 ```bash
 make test-install
 ```
 
 You can then run test by executing the `test` Make target:
+
 ```bash
 make test
 ```
@@ -243,21 +233,19 @@ make test
 To see a more detailed HTML report you can run the `test-html` Make target. The results will then be saved to `htmlcov/index.html`.
 
 # Distribution
-This repository provides a PIP package called `py-i2c-register`. To publish this distribution a variety of helpers are
-provided in the Makefile.
+This repository provides a PIP package called `py-i2c-register`. To publish this distribution a variety of helpers are provided in the Makefile.
 
 ## Setup
-The [Pandoc](http://pandoc.org) tool is required for the release process along with some miscellaneous Python packages.
-Please refer to the [Pandoc Website](http://pandoc.org/installing.html) for installation instructions. You can install the misc. Python
-packages with the `dist-install` Make target:
+The [Pandoc](http://pandoc.org) tool is required for the release process along with some miscellaneous Python packages. Please refer to the [Pandoc Website](http://pandoc.org/installing.html) for installation instructions. You can install the misc. Python packages with the `dist-install` Make target:
+
 ```bash
 make dist-install
 ```
 
-You can verify that all distribution dependencies are install and accessible by running the `dist-check` Make target. If
-it exits successfully all dependencies were found.
+You can verify that all distribution dependencies are install and accessible by running the `dist-check` Make target. If it exits successfully all dependencies were found.
 
 Finally you must create a `.pypirc` file in your home directory with the contents:
+
 ```
 [distutils]
 index-servers=pypi
@@ -267,6 +255,7 @@ repository = https://upload.pypi.org/legacy/
 username = Your Username
 password = Your Password
 ```
+
 This gives the PyPi release tool some basic configuration options and your credentials.
 
 ## Steps
@@ -274,24 +263,27 @@ This section details the steps required to release this package.
 
 1. Test
     - Ensure that all tests pass by running the `test` Make target:
+
     ```bash
     make test
     ```
 2. Clean and build
     - Clean up previous distribution materials by running the `dist-clean` Make target:
+
     ```bash
     make dist-clean
     ```
     - Build the distribution by running the `dist-build` Make target:
+
     ```bash
     make dist-build
     ```
 3. Upload
     - Upload the distribution to PyPi by running the `dist-upload` Make target:
+
     ```bash
     make dist-upload
     ```
     - This requires that you have a `.pypirc` file setup with your username and password
 
-The Makefile provides a useful target which runs steps 1 and 2 under one command named `dist`. However the upload step
-must still be completed separately.
+The Makefile provides a useful target which runs steps 1 and 2 under one command named `dist`. However the upload step must still be completed separately.
