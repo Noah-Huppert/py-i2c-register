@@ -107,7 +107,7 @@ controls.add("REGISTER_NAME", 0x00, Registers.READ + Register.WRITE, {})
 This would define a `Register` with the name `REGISTER_NAME`, the address `0x00` and the permission to read and write to/from it.
 
 ## Adding RegisterSegments
-To actually read or write to/from a `Register` you need to define at least one `RegisterSegment`. These describe how bits read from registers map to sub values.
+To actually read or write to/from a `Register` you need to define at least one `RegisterSegment`. These describe how bits in registers map to sub values.
 
 This could be useful because often devices will pack different pieces of information in bits within a bytes. For example a device could provide a health register where each bit represents a different system's health.
 
