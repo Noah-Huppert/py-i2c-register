@@ -95,7 +95,9 @@ controls = RegisterList(0x62, i2c, {})
 The provided I2C Device address will be used to contact the device which holds the registers over I2C. The [I2C Object](/docs/i2c-object.md) depends on your platform, see the [documentation](/docs/i2c-object.md) for more information. In most cases you can provide an empty `Register` map as well.
 
 ## Defining Registers
-After you create a `RegisterList` you must define some registers to control. A `Register` is defined by a name (for easy programmatic access), an I2C address, and a string containing IO operation permissions. The `RegisterList` class provides a useful `add(reg_name, reg_addr, reg_permissions, reg_segments)` method for adding `Register` objects.
+After you create a `RegisterList` you must define some registers to control. A `Register` is defined by a name (for easy programmatic access), an I2C address, and a string containing IO operation permissions (ex., register read only, or read and write, ect).
+
+The `RegisterList` class provides a useful `add(reg_name, reg_addr, reg_permissions, reg_segments)` method for adding `Register` objects.
 
 ```python
 from py_i2c_register.register import Register
