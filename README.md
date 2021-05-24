@@ -107,7 +107,13 @@ controls.add("REGISTER_NAME", 0x00, Registers.READ + Register.WRITE, {})
 This would define a `Register` with the name `REGISTER_NAME`, the address `0x00` and the permission to read and write to/from it.
 
 ## Adding RegisterSegments
-To actually read or write to/from a `Register` you need to define at least one `RegisterSegment`. These describe how bits read from registers map to sub values. This could be useful if a device for example: provides a health register and each bit represents a different system's health. You define `RegisterSegment`s by giving a name (for easy programmatic access) and the index of the segment's least and most significant bits. The previously mentioned `RegisterList.add()` method returns the `Register` that it just created. You can then in turn use a similar helper method that `Register` provides called `add(seg_name, lsb_i, msb_i, default_bits)`:
+To actually read or write to/from a `Register` you need to define at least one `RegisterSegment`. These describe how bits read from registers map to sub values.
+
+This could be useful because often devices will pack different pieces of information in bits within a bytes. For example a device could provide a health register where each bit represents a different system's health.
+
+You define `RegisterSegment` objects by giving a name (for easy programmatic access) and the index of the segment's least and most significant bits.
+
+The `RegisterList.add()` method returns the `Register` that it just created. You can then in turn use a similar helper method that `Register` provides called `add(seg_name, lsb_i, msb_i, default_bits)` to add a `RegisterSegment`:
 
 ```python
 controls.add("HEALTH", 0x00, Registers.READ, {})\
