@@ -109,7 +109,7 @@ This would define a `Register` with the name `REGISTER_NAME`, the address `0x00`
 ## Adding RegisterSegments
 To actually read or write to/from a `Register` you need to define at least one `RegisterSegment`. These describe how bits in registers map to sub values.
 
-Often devices pack different pieces of information in bits within a bytes. For example a device could provide a health register where each bit represents a different system's health.
+Often devices pack different pieces of information in bits within bytes. For example a device could provide a health register where each bit represents a different system's health.
 
 You define `RegisterSegment` objects by giving a name (for easy programmatic access) and the index of the segment's least and most significant bits.
 
