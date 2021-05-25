@@ -122,10 +122,10 @@ controls.add("HEALTH", 0x00, Registers.READ, {})\
     .add("NETWORK_FLAG", 0, 0, [0])
 ```
 
-This would define a `Register` named `HEALTH` at address `0x00` with read permissions. This `Register` would have 3 `RegisterSegment`s. These 3 register segments would look at bits 0, 1, and 2 for the status of the left and right motors as well as some made up network module.
+This would define a `Register` named `HEALTH` at address `0x00` with read permissions. This `Register` would have 3 `RegisterSegment` objects. These 3 register segments would look at bits 0, 1, and 2 for the status of the left and right motors as well as some made up network module.
 
 ## Reading from RegisterSegments
-The `RegisterList` provides some useful helper methods for reading `RegisterSegment`s as integer values. They are called `to_int` and `to_twos_comp_int`. They both take the name of a `Register` and `RegisterSegment` to read. Optionally you can pass a `read_first` value. When `True` these methods will read the `Register` off the I2C device before returning the `RegisterSegment` value:
+The `RegisterList` provides some useful helper methods for reading `RegisterSegment` objects as integer values. They are called `to_int` and `to_twos_comp_int`. They both take the name of a `Register` and `RegisterSegment` to read. Optionally you can pass a `read_first` value. When `True` these methods will read the `Register` off the I2C device before returning the `RegisterSegment` value:
 
 ```python
 network_status = controls.to_int("HEALTH", "NETWORK_FLAG", read_first=True)
@@ -134,7 +134,7 @@ velocity = controls.to_twos_comp_int("VELOCITY", "VELOCITY", read_first=True)
 
 This would read the `NETWORK_FLAG` segment of the `HEALTH` register and the `VELOCITY` segment of the `VELOCITY` register.
 
-Ontop of using `RegisterList`s helper methods one can access raw `RegisterSegment` values via the `RegisterSegment.bits` array. This array contains the raw `0` or `1` values of the register. Just be sure to call `Register.read` before accessing the `RegisterSegment.bits` array:
+Ontop of using `RegisterList` object helper methods one can access raw `RegisterSegment` values via the `RegisterSegment.bits` array. This array contains the raw `0` or `1` values of the register. Just be sure to call `Register.read` before accessing the `RegisterSegment.bits` array:
 
 ```python
 controls.get("VELOCITY").read()
